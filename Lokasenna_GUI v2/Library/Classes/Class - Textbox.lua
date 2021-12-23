@@ -329,14 +329,16 @@ function GUI.Textbox:drawtext()
     if str == "" then
         if self.placeholder then
             str = self.placeholder
+            GUI.color("elm_fill")
+            GUI.font(self.font_a)
         else
             return
         end
+    else
+        GUI.color(self.color)
+        GUI.font(self.font_b)
     end
     str = string.sub(str, self.wnd_pos + 1)
-
-	GUI.color(self.color)
-	GUI.font(self.font_b)
 
     -- I don't think self.pad should affect the text at all. Looks weird,
     -- messes with the amount of visible text too much.
