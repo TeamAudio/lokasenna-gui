@@ -135,12 +135,24 @@ end
 function GUI.Menubox:val(newval)
 
   if newval then
-    self.retval = newval
+    self:setretval(newval)
     self:redraw()
   else
     return math.floor(self.retval), self.optarray[self.retval]
   end
 
+end
+
+
+function GUI.Menubox:setretval(val)
+  if self.retval ~= val then
+    self.retval = val
+    self:onchange()
+  end
+end
+
+
+function GUI.Menubox:onchange()
 end
 
 
@@ -165,7 +177,7 @@ function GUI.Menubox:onmouseup()
   local curopt = gfx.showmenu(menu_str)
 
   if #sep_arr > 0 then curopt = self:stripseps(curopt, sep_arr) end
-  if curopt ~= 0 then self.retval = curopt end
+  if curopt ~= 0 then self:setretval(curopt) end
 
   self.focus = false
   self:redraw()
@@ -185,8 +197,8 @@ function GUI.Menubox:onwheel()
   --if not self.optarray[2] then return end
 
   -- Check for illegal values, separators, and submenus
-    self.retval = self:validateoption(  GUI.round(self.retval - GUI.mouse.inc),
-                                        GUI.round((GUI.mouse.inc > 0) and 1 or -1) )
+  self:setretval(self:validateoption(  GUI.round(self.retval - GUI.mouse.inc),
+                                       GUI.round((GUI.mouse.inc > 0) and 1 or -1) ))
 
   self:redraw()
 
