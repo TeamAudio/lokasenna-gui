@@ -119,7 +119,7 @@ function GUI.Textbox:draw()
 	gfx.blit(self.buff, 1, 0, (self.focus and self.w or 0), 0,
             self.w, self.h, self.x, self.y)
 
-    if self.retval ~= "" then self:drawtext() end
+    self:drawtext()
 
 	if self.focus then
 
@@ -325,10 +325,18 @@ end
 
 function GUI.Textbox:drawtext()
 
+    local str = self.retval
+    if str == "" then
+        if self.placeholder then
+            str = self.placeholder
+        else
+            return
+        end
+    end
+    str = string.sub(str, self.wnd_pos + 1)
+
 	GUI.color(self.color)
 	GUI.font(self.font_b)
-
-    local str = string.sub(self.retval, self.wnd_pos + 1)
 
     -- I don't think self.pad should affect the text at all. Looks weird,
     -- messes with the amount of visible text too much.
