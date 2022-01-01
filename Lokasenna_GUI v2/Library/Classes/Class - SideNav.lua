@@ -25,7 +25,7 @@ function GUI.SideNav:new(name, z, x, y, tab_w, tab_h, opts, pad_outer, pad_inner
 
     SideNav.x = SideNav.x or x
     SideNav.y = SideNav.y or y
-    SideNav.tab_w = SideNav.tab_w or tab_w or 268
+    SideNav.tab_w = SideNav.tab_w or tab_w or 200
     SideNav.tab_h = SideNav.tab_h or tab_h or 36
 
     SideNav.font_a = SideNav.font_a or 3
@@ -72,6 +72,10 @@ function GUI.SideNav:new(name, z, x, y, tab_w, tab_h, opts, pad_outer, pad_inner
     SideNav.retval = SideNav.retval or 1
     SideNav.state = SideNav.retval or 1
 
+    -- Index of the last mouse hover and mouse down event
+    SideNav.hover_at = nil
+    SideNav.down_at = nil
+
     GUI.redraw_z[SideNav.z] = true
 
     setmetatable(SideNav, self)
@@ -109,7 +113,11 @@ function GUI.SideNav:draw()
         if i ~= state then
             local tab_x = x + pad_outer
             local tab_y = y + pad_outer + (i - 1) * (tab_h + pad_inner)
-            self:draw_tab(tab_x, tab_y, tab_w, tab_h, font, self.col_txt, self.col_tab_b, self.optarray[i])
+            local col_tab = self.col_tab_b
+            if i == self.hover_at then
+              col_tab = self.col_tab_a
+            end
+            self:draw_tab(tab_x, tab_y, tab_w, tab_h, font, self.col_txt, col_tab, self.optarray[i])
         end
     end
 
@@ -156,14 +164,29 @@ end
 
 function GUI.SideNav:onmousedown()
 
-  -- TODO
+    self.down_at = self:mouseover_at()
+    self:redraw()
 
 end
 
 
 function GUI.SideNav:onmouseup()
 
-  -- TODO
+    if self.down_at ~= nil and self.down_at == self:mouseover_at() then
+        self.state = self.down_at
+        self.retval = self.state
+        self:update_sets()
+    end
+
+    self.down_at = nil
+    self:redraw()
+
+end
+
+function GUI.SideNav:onmouseover()
+
+    self.hover_at = self:mouseover_at()
+    self:redraw()
 
 end
 
@@ -186,7 +209,7 @@ function GUI.SideNav:draw_tab(x, y, w, h, font, col_txt, col_bg, lbl)
     GUI.font(font)
 
     local str_w, str_h = gfx.measurestr(lbl)
-    gfx.x = x + ((w - str_w) / 2)
+    gfx.x = x + 18
     gfx.y = y + ((h - str_h) / 2)
     gfx.drawstr(lbl)
 
@@ -198,6 +221,28 @@ end
 ------------------------------------
 -------- SideNav helpers -----------
 ------------------------------------
+
+
+-- Returns the index into optarray of the given x, y position, or
+-- mouse.x/mouse.y if x or y are nil
+function GUI.SideNav:mouseover_at(x, y)
+    local inner_x = self.x + self.pad_outer
+    local inner_y = self.y + self.pad_outer
+
+    for i = 1, #self.optarray do
+        if GUI.IsInside({
+            x = inner_x,
+            y = inner_y,
+            w = self.tab_w,
+            h = self.tab_h
+        }, x, y) then
+            return i
+        end
+        inner_y = inner_y + self.tab_h + self.pad_inner
+    end
+
+    return nil
+end
 
 
 -- Updates visibility for any layers assigned to the tabs
