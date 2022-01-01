@@ -107,6 +107,7 @@ function GUI.SideNav:draw()
 
     GUI.color(self.bg)
     gfx.rect(x, y, self.w, self.h, true)
+    gfx.muladdrect(self.w - 1, y, 1, self.h, 0, 0, 0, GUI.colors["shadow"][4])
 
     -- Draw the inactive tabs first
     for i = #self.optarray, 1, -1 do
