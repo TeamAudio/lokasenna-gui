@@ -165,7 +165,7 @@ end
 
 function GUI.SideNav:onmousedown()
 
-    self.down_at = self:mouseover_at()
+    self.down_at = self:mouse_at()
     self:redraw()
 
 end
@@ -173,7 +173,7 @@ end
 
 function GUI.SideNav:onmouseup()
 
-    if self.down_at ~= nil and self.down_at == self:mouseover_at() then
+    if self.down_at ~= nil and self.down_at == self:mouse_at() then
         self.state = self.down_at
         self.retval = self.state
         self:update_sets()
@@ -184,9 +184,9 @@ function GUI.SideNav:onmouseup()
 
 end
 
-function GUI.SideNav:onmouseover()
+function GUI.SideNav:onupdate()
 
-    self.hover_at = self:mouseover_at()
+    self.hover_at = self:mouse_at()
     self:redraw()
 
 end
@@ -224,9 +224,9 @@ end
 ------------------------------------
 
 
--- Returns the index into optarray of the given x, y position, or
--- mouse.x/mouse.y if x or y are nil
-function GUI.SideNav:mouseover_at(x, y)
+-- Returns the index into optarray corresponding to the current mouse
+-- position, or nil if the mouse is not over an item
+function GUI.SideNav:mouse_at()
     local inner_x = self.x + self.pad_outer
     local inner_y = self.y + self.pad_outer
 
@@ -236,7 +236,7 @@ function GUI.SideNav:mouseover_at(x, y)
             y = inner_y,
             w = self.tab_w,
             h = self.tab_h
-        }, x, y) then
+        }) then
             return i
         end
         inner_y = inner_y + self.tab_h + self.pad_inner
