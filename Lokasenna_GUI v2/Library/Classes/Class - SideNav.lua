@@ -98,9 +98,8 @@ function GUI.SideNav:draw()
     local tab_w, tab_h = self.tab_w, self.tab_h
     local pad_outer = self.pad_outer
     local pad_inner = self.pad_inner
-    local font = self.font_b
-    local font_active = self.font_a
     local state = self.state
+    local hover_at = self.hover_at
 
     -- Make sure h is at least the size of the tabs.
     self.h = self.fullheight and (GUI.cur_h - self.y) or math.max(self.h, (tab_h + pad_inner) * #self.optarray - pad_inner + 2 * pad_outer)
@@ -109,29 +108,53 @@ function GUI.SideNav:draw()
     gfx.rect(x, y, self.w, self.h, true)
     gfx.muladdrect(self.w - 1, y, 1, self.h, 0, 0, 0, GUI.colors["shadow"][4])
 
-    -- Draw the inactive tabs first
-    for i = #self.optarray, 1, -1 do
-        if i ~= state then
-            local tab_x = x + pad_outer
-            local tab_y = y + pad_outer + (i - 1) * (tab_h + pad_inner)
-            local col_tab = self.col_tab_b
-            if i == self.hover_at then
-              col_tab = self.col_tab_a
-            end
-            self:draw_tab(tab_x, tab_y, tab_w, tab_h, font, self.col_txt, col_tab, self.optarray[i])
+    local tab_x = x + pad_outer
+    local tab_y = y + pad_outer
+
+    for i = 1, #self.optarray do
+        local active = i == state
+        local hover = i == hover_at
+        local col_tab = self.col_tab_b
+        local font = self.font_b
+
+        if active or hover then
+            col_tab = self.col_tab_a
+            font = self.font_a
         end
+
+        self:draw_tab(tab_x, tab_y, tab_w, tab_h, font, self.col_txt, col_tab, self.optarray[i])
+
+        if active then
+            GUI.color(self.col_active)
+            GUI.roundrect(tab_x, tab_y + 10, 4, tab_h - 20, 2, 1, 1)
+        end
+
+        tab_y = tab_y + tab_h + pad_inner
     end
 
-    local tab_x = x + pad_outer
-    local tab_y = y + pad_outer + (state - 1) * (tab_h + pad_inner)
-    self:draw_tab(tab_x, tab_y, tab_w, tab_h, font_active, self.col_txt, self.col_tab_a, self.optarray[state])
+end
 
-    local highlight_x = x + pad_outer
-    local highlight_y = y + pad_outer + (state - 1) * (tab_h + pad_inner) + 10
-    local highlight_w = 4
-    local highlight_h = tab_h - 20
-    GUI.color(self.col_active)
-    GUI.roundrect(highlight_x, highlight_y, highlight_w, highlight_h, 2, 1, 1)
+
+-- Returns the index into optarray corresponding to the current mouse
+-- position, or nil if the mouse is not over an item
+function GUI.SideNav:mouse_at()
+
+    local tab_x = self.x + self.pad_outer
+    local tab_y = self.y + self.pad_outer
+
+    for i = 1, #self.optarray do
+        if GUI.IsInside({
+            x = tab_x,
+            y = tab_y,
+            w = self.tab_w,
+            h = self.tab_h
+        }) then
+            return i
+        end
+        tab_y = tab_y + self.tab_h + self.pad_inner
+    end
+
+    return nil
 
 end
 
@@ -222,28 +245,6 @@ end
 ------------------------------------
 -------- SideNav helpers -----------
 ------------------------------------
-
-
--- Returns the index into optarray corresponding to the current mouse
--- position, or nil if the mouse is not over an item
-function GUI.SideNav:mouse_at()
-    local inner_x = self.x + self.pad_outer
-    local inner_y = self.y + self.pad_outer
-
-    for i = 1, #self.optarray do
-        if GUI.IsInside({
-            x = inner_x,
-            y = inner_y,
-            w = self.tab_w,
-            h = self.tab_h
-        }) then
-            return i
-        end
-        inner_y = inner_y + self.tab_h + self.pad_inner
-    end
-
-    return nil
-end
 
 
 -- Updates visibility for any layers assigned to the tabs
