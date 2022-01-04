@@ -12,6 +12,8 @@ end
 
 local ref_txt = {x = 128, y = 16, w = 128, h = 20, off = 24}
 local button_names = {}
+local button_pad
+local button_w
 
 local function check_window_size(w, h)
     
@@ -69,11 +71,11 @@ local function wnd_open(self)
     self:adjustchildelms()
     
     -- Place the buttons appropriately
-    local button_padding = 0
+    local button_x_pos = 0
     for bn =1, #button_names do
         local button_element = GUI.elms["ButtonPopupUserInput_Button_"..bn]
-        button_element.x = self.x + (self.w/3) -72 + button_padding
-        button_padding = button_padding + 80
+        button_element.x = self.x + (self.w/#button_names) -72 + button_x_pos
+        button_x_pos = button_x_pos + (button_pad + button_w)
     end
 end
     
@@ -96,10 +98,11 @@ local function wnd_close(self, apply, retval)
     
 end
 
-function GUI.ButtonPopupGetUserInputs(title, input_button_names, ret_func, extra_width)
+function GUI.ButtonPopupGetUserInputs(title, input_button_names, ret_func, extra_width, button_width, button_padding)
 
     button_names = input_button_names
-
+    button_pad = button_padding 
+    button_w = button_width   
 	-- Figure out the window dimensions
     local w = ref_txt.x + ref_txt.w + (extra_width or 0) + 16
     local h = 16 + 0 * (ref_txt.off) + 80
@@ -144,7 +147,7 @@ function GUI.ButtonPopupGetUserInputs(title, input_button_names, ret_func, extra
             z = z_set[1],
             x = 0,
             y = h - 64,
-            w = 75,
+            w = button_width,
             h = 24,
             caption = name,
             retval = i
