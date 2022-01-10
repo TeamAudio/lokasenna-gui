@@ -1,6 +1,5 @@
 -- We'll be reusing a couple of methods from this
-GUI.req("Classes/Class - Button.lua")()
-
+--GUI.req("Classes/Class - Button.lua")()
 -- We'll keep the loaded images here so we don't keep loading existing files
 local images = {}
 
@@ -14,6 +13,7 @@ local function loadImage(image_src)
   local buffer = GUI.GetBuffer()
 
   -- Attempt to load the given image from our ./images
+  if GUI.script_path == nil then GUI.script_path ="" end 
   local ret = gfx.loadimg(buffer, GUI.script_path.."/images/"..image_src..".png")
 
   -- If we're good, store the buffer number and return it
