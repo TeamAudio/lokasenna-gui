@@ -87,7 +87,7 @@ function GUI.Menubox:init()
 
   local w, h = self.w, self.h
 
-  self.buff = GUI.GetBuffer()
+  self.buff = self.buff or GUI.GetBuffer()
 
   gfx.dest = self.buff
   gfx.setimgdim(self.buff, -1, -1)
