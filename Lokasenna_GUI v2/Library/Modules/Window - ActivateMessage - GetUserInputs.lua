@@ -11,7 +11,6 @@ if not (GUI and GUI.Window and GUI.Textbox and GUI.Button) then
 end
 
 local ref_txt = {x = 128, y = 16, w = 128, h = 20, off = 24}
-local button_names = {}
 local button_pad
 local button_w
 
@@ -54,11 +53,11 @@ end
 local function clear_UserInputs()
     
     -- Return the buffers we borrowed for our z_set
-    GUI.FreeBuffer(GUI.elms.ActivateProductUserInput_wnd.z_set)
+    GUI.FreeBuffer(GUI.elms.ActivateMessageUserInput_wnd.z_set)
     
     -- Delete any elms with "UserInput" in their name
     for k in pairs(GUI.elms) do
-        if string.match(k, "ActivateProductUserInput") then
+        if string.match(k, "ActivateMessageUserInput") then
             GUI.elms[k]:delete()
         end
     end
@@ -72,11 +71,9 @@ local function wnd_open(self)
     
     -- Place the buttons appropriately
     local button_x_pos = 0
-    for bn =1, #button_names do
-        local button_element = GUI.elms["ActivateProductUserInput_Button_"..bn]
-        button_element.x = self.x + (self.w/#button_names) -225 + button_x_pos
+        local button_element = GUI.elms["ActivateMessageUserInput_Button"]
+        button_element.x = self.x + (self.w/2) -45 + button_x_pos
         button_x_pos = button_x_pos + (button_pad + button_w)
-    end
 end
     
 local function wnd_close(self, apply, retval)
@@ -84,7 +81,6 @@ local function wnd_close(self, apply, retval)
     self:showlayers()
     
     return_values(apply, self.ret_func, retval)
-    
     GUI.escape_bypass = false
 
     if self.resize then
@@ -98,15 +94,8 @@ local function wnd_close(self, apply, retval)
     
 end
 
-local function wnd_send_value(self, apply, retval)
-    
-    return_values(apply, self.ret_func, retval)
-    
-end
+function GUI.ActivateMessageGetUserInputs(title,message, button_name, ret_func, extra_width, button_width, button_padding, label_indent)
 
-function GUI.ActivateProductGetUserInputs(title, input_button_names, ret_func, extra_width, button_width, button_padding)
-
-    button_names = input_button_names
     button_pad = button_padding 
     button_w = button_width   
 	-- Figure out the window dimensions
@@ -130,7 +119,7 @@ function GUI.ActivateProductGetUserInputs(title, input_button_names, ret_func, e
     -- Set up the window
     --	name, z, x, y, w, h, caption, z_set[, center]
     local elms = {}
-    elms.ActivateProductUserInput_wnd = {
+    elms.ActivateMessageUserInput_wnd = {
         type = "Window",
         z = z_set[2],
         x = 0,
@@ -139,49 +128,33 @@ function GUI.ActivateProductGetUserInputs(title, input_button_names, ret_func, e
         h = h,
         caption = title or "",
         z_set = z_set,
-        num_inputs = #button_names-1,
+        num_inputs = 0,
         ret_func = ret_func,
-        resize = resize,
-        noclose = true
+        resize = resize
     }
 
-     elms.ActivateProductUserInput_keybox = {
-        type ="Textbox",    
-        z = z_set[1],
-        x = 128,
-        y = 32,
-        w = 150,
-        h = 24,
-        placeholder = '',
-        caption = "Enter Product Key"
-    }
-
-       elms.ActivateProductUserInput_label = {
+    elms.ActivateMessageUserInput_label = {
         type ="Label",    
         z = z_set[1],
-        x = 85,
-        y = 64,
+        x = 85-label_indent,
+        y = 36,
         w = 150,
         h = 10,
         placeholder = '',
-        caption = ""
+        caption = message
+    }
+    -- Set up the OK/Cancel buttons
+    elms.ActivateMessageUserInput_Button = {
+        type = "Button",
+        z = z_set[1],
+        x = 0,
+        y = h - 65,
+        w = button_width,
+        h = 24,
+        caption = button_name,
+        retval = i
     }
     
-    for i = 1, #button_names do
-        local name = button_names[i]
-         -- Set up the OK/Cancel buttons
-        elms["ActivateProductUserInput_Button_"..i] = {
-            type = "Button",
-            z = z_set[1],
-            x = 0,
-            y = h -50,
-            w = button_width,
-            h = 16,
-            caption = name,
-            retval = i,
-            ret_func=ret_func
-    }
-    end
 
   -- Create the window and elements
     GUI.CreateElms(elms)
@@ -190,18 +163,17 @@ function GUI.ActivateProductGetUserInputs(title, input_button_names, ret_func, e
     GUI.update_elms_list()
 
      -- Method overrides so we can return values and whatnot
-    GUI.elms.ActivateProductUserInput_wnd.onopen = wnd_open
+    GUI.elms.ActivateMessageUserInput_wnd.onopen = wnd_open
+    
+    GUI.elms.ActivateMessageUserInput_wnd.close = wnd_close
     
     GUI.newfocus = GUI.elms.Window
 
-    for bn =1, #button_names do
-        local button_element = GUI.elms["ActivateProductUserInput_Button_"..bn]
-        button_element.onmousedown = wnd_send_value
-        button_element.func = function() button_element:onmousedown(true,button_element.retval)end
-    end
+    
+    local button_element = GUI.elms["ActivateMessageUserInput_Button"]
+    button_element.func = function() GUI.elms.ActivateMessageUserInput_wnd:close(true,button_element.retval) end
+    
 
-    GUI.elms.ActivateProductUserInput_wnd:open()
-    --Dont escape window close app if activation windows is escaped
-    GUI.escape_bypass = false
+    GUI.elms.ActivateMessageUserInput_wnd:open()
 
 end
