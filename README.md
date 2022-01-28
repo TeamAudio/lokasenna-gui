@@ -1,4 +1,4 @@
-_**Note: With the release of v3, this repo is no longer being actively developed with the exception of fixing any bugs that may come up. v3 is available on ReaPack, and documentation can be found [here](https://jalovatt.github.io/scythe). Cheers.**_
+_**Note: This is a fork of Lokasenna GUI v2 by Team Audio with additional features and bug fixes.**_
 
 # Lokasenna_GUI v2
 Lua GUI library for [REAPER][1] scripts
