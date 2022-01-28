@@ -1,6 +1,6 @@
 -- NoIndex: true
 
---[[	Lokasenna_GUI - SideNav class
+--[[	Lokasenna_GUI (Team Audio addition) - SideNav class
 
     Creation parameters:
     name, z, x, y, tab_w, tab_h, opts[, pad_outer][, pad_inner]
