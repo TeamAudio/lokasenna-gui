@@ -166,6 +166,7 @@ function GUI.SideNav:val(newval)
         self.retval = self.state
 
         self:update_sets()
+        self:onchange()
         self:redraw()
     else
         return self.state
@@ -200,6 +201,7 @@ function GUI.SideNav:onmouseup()
         self.state = self.down_at
         self.retval = self.state
         self:update_sets()
+        self:onchange()
     end
 
     self.down_at = nil

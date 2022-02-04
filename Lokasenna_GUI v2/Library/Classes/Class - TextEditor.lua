@@ -721,6 +721,7 @@ function GUI.TextEditor:deleteselection()
 
 	self:clearselection()
 	self:windowtocaret()
+	self:onchange()
 
 end
 
@@ -1006,6 +1007,8 @@ function GUI.TextEditor:insertstring(str, move_caret)
 
 	end
 
+	self:onchange()
+
 end
 
 
@@ -1020,6 +1023,8 @@ function GUI.TextEditor:insertchar(char)
                  str:sub(self.caret.x + (self.insert_caret and 2 or 1))
 	self.retval[self.caret.y] = a..string.char(char)..b
 	self.caret.x = self.caret.x + 1
+
+	self:onchange()
 
 end
 
@@ -1073,6 +1078,8 @@ function GUI.TextEditor:backtab()
 
     self.caret.x = string.len(pre)
     self.retval[self.caret.y] = pre..post
+
+    self:onchange()
 
 end
 
@@ -1195,6 +1202,7 @@ GUI.TextEditor.keys = {
 			self.retval[self.caret.y] = str:sub(1, self.caret.x - 1)..
                                         str:sub(self.caret.x + 1, -1)
 			self.caret.x = self.caret.x - 1
+			self:onchange()
 
 		-- Beginning of the line; backspace the contents to the prev. line
 		elseif self.caret.x == 0 and self.caret.y > 1 then
@@ -1203,6 +1211,7 @@ GUI.TextEditor.keys = {
 			self.retval[self.caret.y - 1] = self.retval[self.caret.y - 1] .. (self.retval[self.caret.y] or "")
 			table.remove(self.retval, self.caret.y)
 			self.caret.y = self.caret.y - 1
+			self:onchange()
 
 		end
 
@@ -1242,12 +1251,14 @@ GUI.TextEditor.keys = {
 			local str = self.retval[self.caret.y] or ""
 			self.retval[self.caret.y] = str:sub(1, self.caret.x) ..
                                         str:sub(self.caret.x + 2)
+			self:onchange()
 
 		elseif self.caret.y < self:getwndlength() then
 
 			self.retval[self.caret.y] = self.retval[self.caret.y] ..
                                         (self.retval[self.caret.y + 1] or "")
 			table.remove(self.retval, self.caret.y + 1)
+			self:onchange()
 
 		end
 
@@ -1264,6 +1275,7 @@ GUI.TextEditor.keys = {
 		table.insert(self.retval, self.caret.y + 1, str:sub(self.caret.x + 1) )
 		self.caret.y = self.caret.y + 1
 		self.caret.x = 0
+		self:onchange()
 
 	end,
 
@@ -1339,6 +1351,7 @@ function GUI.TextEditor:undo()
 	self.caret = state.caret
 
 	self:windowtocaret()
+	self:onchange()
 
 end
 
@@ -1352,6 +1365,7 @@ function GUI.TextEditor:redo()
 	self.caret = state.caret
 
 	self:windowtocaret()
+	self:onchange()
 
 end
 
@@ -1385,6 +1399,7 @@ function GUI.TextEditor:seteditorstate(retval, caret, wnd_pos, sel_s, sel_e)
 	self.caret = caret or {x = 0, y = 1}
     self.sel_s = sel_s or nil
     self.sel_e = sel_e or nil
+	self:onchange()
 
 end
 

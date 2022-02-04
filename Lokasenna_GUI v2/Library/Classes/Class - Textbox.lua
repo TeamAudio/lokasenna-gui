@@ -504,7 +504,7 @@ function GUI.Textbox:deleteselection()
 
     self.sel_s, self.sel_e = nil, nil
     self:windowtocaret()
-
+    self:onchange()
 
 end
 
@@ -632,6 +632,8 @@ function GUI.Textbox:insertstring(str, move_caret)
 
     if move_caret then self.caret = self.caret + string.len(str) end
 
+    self:onchange()
+
 end
 
 
@@ -644,6 +646,8 @@ function GUI.Textbox:insertchar(char)
 
     self.retval = a..string.char(char)..b
     self.caret = self.caret + 1
+
+    self:onchange()
 
 end
 
@@ -725,6 +729,7 @@ GUI.Textbox.keys = {
             self.retval =   string.sub(str, 1, self.caret - 1)..
                             string.sub(str, self.caret + 1, -1)
             self.caret = math.max(0, self.caret - 1)
+            self:onchange()
 
         end
 
@@ -749,6 +754,7 @@ GUI.Textbox.keys = {
             local str = self.retval
             self.retval =   string.sub(str, 1, self.caret) ..
                             string.sub(str, self.caret + 2)
+            self:onchange()
 
         end
 
@@ -843,6 +849,7 @@ function GUI.Textbox:undo()
 	self.caret = state.caret
 
 	self:windowtocaret()
+	self:onchange()
 
 end
 
@@ -857,6 +864,7 @@ function GUI.Textbox:redo()
 	self.caret = state.caret
 
 	self:windowtocaret()
+	self:onchange()
 
 end
 
@@ -883,6 +891,7 @@ function GUI.Textbox:seteditorstate(retval, caret, wnd_pos, sel_s, sel_e)
     self.caret = math.min(caret and caret or self.caret, string.len(self.retval))
     self.wnd_pos = wnd_pos or 0
     self.sel_s, self.sel_e = sel_s or nil, sel_e or nil
+    self:onchange()
 
 end
 

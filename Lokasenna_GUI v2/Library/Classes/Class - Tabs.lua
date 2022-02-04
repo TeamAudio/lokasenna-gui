@@ -144,6 +144,7 @@ function GUI.Tabs:val(newval)
 		self.retval = self.state
 
 		self:update_sets()
+		self:onchange()
 		self:redraw()
 	else
 		return self.state
@@ -187,6 +188,7 @@ function GUI.Tabs:onmouseup()
 
 		self.retval = self.state
 		self:update_sets()
+		self:onchange()
 
 	else
 		self.state = self.retval
@@ -214,6 +216,7 @@ function GUI.Tabs:onwheel()
 
 	self.retval = self.state
 	self:update_sets()
+	self:onchange()
 	self:redraw()
 
 end

@@ -1210,6 +1210,9 @@ function GUI.Element:ondelete() end
 -- value internally as what it's displaying
 function GUI.Element:val() end
 
+-- Called when an element's value has changed
+function GUI.Element:onchange() end
+
 -- Called on every update loop if the mouse is over this element.
 function GUI.Element:onmouseover() end
 

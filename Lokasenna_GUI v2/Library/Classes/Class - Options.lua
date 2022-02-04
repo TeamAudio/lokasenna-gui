@@ -337,6 +337,7 @@ function GUI.Radio:val(newval)
 	if newval ~= nil then
 		self.retval = newval
 		self.state = newval
+		self:onchange()
 		self:redraw()
 	else
 		return self.retval
@@ -366,6 +367,7 @@ function GUI.Radio:onmouseup()
     -- isn't inside the list anymore
 	if GUI.IsInside(self, GUI.mouse.x, GUI.mouse.y) then
 		self.retval = self.state
+		self:onchange()
 	else
 		self.state = self.retval
 	end
@@ -400,6 +402,7 @@ function GUI.Radio:onwheel()
 
 	self.retval = self.state
 
+	self:onchange()
 	self:redraw()
 
 end
@@ -476,10 +479,12 @@ function GUI.Checklist:val(newval)
 			for k, v in pairs(newval) do
 				self.optsel[tonumber(k)] = v
 			end
+			self:onchange()
 			self:redraw()
         elseif type(newval) == "boolean" and #self.optarray == 1 then
 
             self.optsel[1] = newval
+            self:onchange()
             self:redraw()
 		end
 	else
@@ -513,6 +518,7 @@ function GUI.Checklist:onmouseup()
 	self.optsel[mouseopt] = not self.optsel[mouseopt]
 
     self.focus = false
+	self:onchange()
 	self:redraw()
 
 end
