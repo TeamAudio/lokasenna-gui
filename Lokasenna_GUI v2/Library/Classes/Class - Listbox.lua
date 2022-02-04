@@ -148,6 +148,7 @@ function GUI.Listbox:val(newval)
 
         end
 
+		self:onchange()
 		self:redraw()
 
 	else
@@ -202,6 +203,7 @@ function GUI.Listbox:onmouseup()
 
 	end
 
+	self:onchange()
 	self:redraw()
 
 end

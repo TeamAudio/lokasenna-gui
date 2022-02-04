@@ -345,5 +345,6 @@ end
 function GUI.Knob:setretval()
 
     self.retval = self:formatretval(self.inc * self.curstep + self.min)
+    self:onchange()
 
 end

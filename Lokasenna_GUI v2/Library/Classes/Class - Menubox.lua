@@ -152,8 +152,6 @@ function GUI.Menubox:setretval(val)
 end
 
 
-function GUI.Menubox:onchange()
-end
 
 
 ------------------------------------

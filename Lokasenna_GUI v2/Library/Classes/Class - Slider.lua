@@ -572,5 +572,6 @@ function GUI.Slider:setretval(sldr)
                                 or self.min - self.inc * self.handles[sldr].curstep
 
     self.handles[sldr].retval = self:formatretval(val)
+    self:onchange()
 
 end
