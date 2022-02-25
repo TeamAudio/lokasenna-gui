@@ -301,6 +301,10 @@ function GUI.Textbox:drawcaption()
         gfx.x = self.x + (self.w - str_w) / 2
         gfx.y = self.y - str_h - self.pad
 
+    elseif self.cap_pos == "topleft" then
+        gfx.x = self.x
+        gfx.y = self.y - str_h - self.pad
+
     elseif self.cap_pos == "right" then
         gfx.x = self.x + self.w + self.pad
         gfx.y = self.y + (self.h - str_h) / 2
