@@ -425,6 +425,15 @@ function GUI.Listbox:overscrollbar(x)
 end
 
 
+-- Selects all items
+function GUI.Listbox:selectall()
+  self.retval = {}
+  for i = 1, #self.list do
+    self.retval[i] = true
+  end
+end
+
+
 -- Selects from the first selected item to the current mouse position
 function GUI.Listbox:selectrange(mouse)
 
