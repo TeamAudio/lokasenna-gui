@@ -66,9 +66,17 @@ function GUI.Image:drawpixels()
     local p = self.pixels or {}
 
     for i = 1, #p do
-        gfx.set(p[i][1], p[i][2], p[i][3], p[i][4])
-        for w = 5, #p[i], 4 do
-            gfx.rect(p[i][w], p[i][w + 1], p[i][w + 2], p[i][w + 3], true)
+        local row = p[i]
+        local x = 0
+        local y = i - 1
+
+        for j = 1, #row, 5 do
+            local length = row[j]
+
+            gfx.set(row[j + 1] / 255, row[j + 2] / 255, row[j + 3] / 255, row[j + 4] / 255)
+            gfx.rect(x, y, length, 1, true)
+
+            x = x + length
         end
     end
 
