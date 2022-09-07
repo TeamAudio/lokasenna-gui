@@ -64,21 +64,7 @@ end
 function GUI.Image:drawpixels()
 
     local p = self.pixels or {}
-
-    for i = 1, #p do
-        local row = p[i]
-        local x = 0
-        local y = i - 1
-
-        for j = 1, #row, 5 do
-            local length = row[j]
-
-            gfx.set(row[j + 1] / 255, row[j + 2] / 255, row[j + 3] / 255, row[j + 4] / 255)
-            gfx.rect(x, y, length, 1, true)
-
-            x = x + length
-        end
-    end
+    GUI.draw_rle_image(p)
 
 end
 

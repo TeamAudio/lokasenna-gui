@@ -2357,6 +2357,39 @@ GUI.triangle = function (fill, ...)
 end
 
 
+--[[
+    Draws run-length encoded image data
+
+    pixels  Table of { {L, R, G, B, A, L, R, G, B, A, ...}, ... },
+            one subtable per horizontal row, where L is the
+            number of pixels in each run of R, G, B, A
+
+    off_x   Optional x-offset
+    off_y   Optional y-offset
+]]--
+GUI.draw_rle_image = function (pixels, off_x, off_y)
+
+    off_x = off_x or 0
+    off_y = off_y or 0
+
+    for i = 1, #pixels do
+        local row = pixels[i]
+        local x = 0
+        local y = i - 1
+
+        for j = 1, #row, 5 do
+            local length = row[j]
+
+            gfx.set(row[j + 1] / 255, row[j + 2] / 255, row[j + 3] / 255, row[j + 4] / 255)
+            gfx.rect(x + off_x, y + off_y, length, 1, true)
+
+            x = x + length
+        end
+    end
+
+end
+
+
 
 
 ------------------------------------
