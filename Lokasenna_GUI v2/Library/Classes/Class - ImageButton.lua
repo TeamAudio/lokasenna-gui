@@ -33,6 +33,7 @@ function GUI.ImageButton:new(name, z, x, y, w, h, img_w, img_h, pixels, caption,
     ImageButton.caption = ImageButton.caption or caption
     ImageButton.font = ImageButton.font or 2
 
+    ImageButton.col_bg = ImageButton.col_bg or "wnd_bg"
     ImageButton.col_txt = ImageButton.col_txt or "txt"
     ImageButton.col_fill = ImageButton.col_fill or "elm_fill"
     ImageButton.col_frame = ImageButton.col_frame or "elm_frame"
@@ -55,19 +56,27 @@ function GUI.ImageButton:init()
 
     self.buffs = self.buffs or GUI.GetBuffer(2)
 
+    -- Draw inactive button into buffs[1]
+
     gfx.dest = self.buffs[1]
     gfx.setimgdim(gfx.dest, -1, -1)
     gfx.setimgdim(gfx.dest, self.w, self.h)
 
+    GUI.color(self.col_bg)
+    gfx.rect(0, 0, self.w, self.h)
     GUI.color(self.col_frame)
     GUI.roundrect(0, 0, self.w - 1, self.h - 1, 8, 1, 1)
 
     self:drawpixels()
 
+    -- Draw active button into buffs[2]
+
     gfx.dest = self.buffs[2]
     gfx.setimgdim(gfx.dest, -1, -1)
     gfx.setimgdim(gfx.dest, self.w, self.h)
 
+    GUI.color(self.col_bg)
+    gfx.rect(0, 0, self.w, self.h)
     GUI.color(self.col_fill)
     GUI.roundrect(0, 0, self.w - 1, self.h - 1, 8, 1, 1)
 
