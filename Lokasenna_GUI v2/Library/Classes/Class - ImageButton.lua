@@ -130,7 +130,7 @@ function GUI.ImageButton:draw()
 
     local str_w, str_h = gfx.measurestr(str)
     gfx.x = x + ((w - str_w) / 2)
-    gfx.y = h - str_h
+    gfx.y = y + h - str_h - 8
     gfx.drawstr(str)
 
 end
