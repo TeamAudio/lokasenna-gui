@@ -149,11 +149,23 @@ function GUI.ImageButton:onmouseup()
 	self.state = 0
 
 	-- If the mouse was released on the button, run func
-	if GUI.IsInside(self, GUI.mouse.x, GUI.mouse.y) then
+	if GUI.IsInside(self) then
 
 		self.func(table.unpack(self.params))
 
 	end
 	self:redraw()
+
+end
+
+function GUI.ImageButton:onupdate()
+
+	if self.state == 0 and GUI.IsInside(self) then
+		self.state = 1
+		self:redraw()
+	elseif self.state == 1 and not GUI.IsInside(self) then
+		self.state = 0
+		self:redraw()
+	end
 
 end
