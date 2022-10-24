@@ -31,7 +31,7 @@ function GUI.ImageButton:new(name, z, x, y, w, h, img_w, img_h, pixels, caption,
     ImageButton.pixels = ImageButton.pixels or pixels
 
     ImageButton.caption = ImageButton.caption or caption
-    ImageButton.font = ImageButton.font or 2
+    ImageButton.font = ImageButton.font or 3
 
     ImageButton.col_bg = ImageButton.col_bg or "wnd_bg"
     ImageButton.col_txt = ImageButton.col_txt or "txt"
