@@ -1752,7 +1752,7 @@ GUI.font = function (fnt)
     -- Different OSes use different font sizes, for some reason
     -- This should give a similar size on Mac/Linux as on Windows
     if not string.match( reaper.GetOS(), "Win") then
-        size = math.floor(size * 0.8)
+        size = math.floor(size * 0.77)
     end
 
     -- Cheers to Justin and Schwa for this
