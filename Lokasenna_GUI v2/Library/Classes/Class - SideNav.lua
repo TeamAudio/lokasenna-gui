@@ -211,8 +211,12 @@ end
 
 function GUI.SideNav:onupdate()
 
+    local prev_hover_at = self.hover_at
     self.hover_at = self:mouse_at()
-    self:redraw()
+
+    if self.hover_at ~= prev_hover_at then
+        self:redraw()
+    end
 
 end
 
