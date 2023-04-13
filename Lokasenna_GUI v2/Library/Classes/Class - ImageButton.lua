@@ -1,7 +1,7 @@
 --[[	Lokasenna_GUI (Team Audio addition) - Image Button class
 
     Creation parameters:
-        name, z, x, y, w, h[, pixels]
+        name, z, x, y, w, h[, pixels, scale, caption, func, params...]
 
 ]]--
 
@@ -13,7 +13,7 @@ end
 
 
 GUI.ImageButton = GUI.Element:new()
-function GUI.ImageButton:new(name, z, x, y, w, h, img_w, img_h, pixels, caption, func, ...)
+function GUI.ImageButton:new(name, z, x, y, w, h, img_w, img_h, pixels, scale, caption, func, ...)
 
     local ImageButton = (not x and type(z) == "table") and z or {}
 
@@ -29,6 +29,7 @@ function GUI.ImageButton:new(name, z, x, y, w, h, img_w, img_h, pixels, caption,
     ImageButton.img_w = ImageButton.img_w or img_w
     ImageButton.img_h = ImageButton.img_h or img_h
     ImageButton.pixels = ImageButton.pixels or pixels
+    ImageButton.scale = ImageButton.scale or scale or 1
 
     ImageButton.caption = ImageButton.caption or caption
     ImageButton.font = ImageButton.font or 3
@@ -60,12 +61,12 @@ function GUI.ImageButton:init()
 
     gfx.dest = self.buffs[1]
     gfx.setimgdim(gfx.dest, -1, -1)
-    gfx.setimgdim(gfx.dest, self.w, self.h)
+    gfx.setimgdim(gfx.dest, self.w / self.scale, self.h / self.scale)
 
     GUI.color(self.col_bg)
-    gfx.rect(0, 0, self.w, self.h)
+    gfx.rect(0, 0, self.w / self.scale, self.h / self.scale)
     GUI.color(self.col_frame)
-    GUI.roundrect(0, 0, self.w - 1, self.h - 1, 8, 1, 1)
+    GUI.roundrect(0, 0, self.w / self.scale - 1, self.h / self.scale - 1, 8, 1, 1)
 
     self:drawpixels()
 
@@ -73,12 +74,12 @@ function GUI.ImageButton:init()
 
     gfx.dest = self.buffs[2]
     gfx.setimgdim(gfx.dest, -1, -1)
-    gfx.setimgdim(gfx.dest, self.w, self.h)
+    gfx.setimgdim(gfx.dest, self.w / self.scale, self.h / self.scale)
 
     GUI.color(self.col_bg)
-    gfx.rect(0, 0, self.w, self.h)
+    gfx.rect(0, 0, self.w / self.scale, self.h / self.scale)
     GUI.color(self.col_fill)
-    GUI.roundrect(0, 0, self.w - 1, self.h - 1, 8, 1, 1)
+    GUI.roundrect(0, 0, self.w / self.scale - 1, self.h / self.scale - 1, 8, 1, 1)
 
     self:drawpixels()
 
@@ -101,8 +102,8 @@ function GUI.ImageButton:drawpixels()
     str = str:gsub([[\n]],"\n")
     local _, str_h = gfx.measurestr(str)
 
-    local img_pad_x = (self.w - self.img_w) / 2
-    local img_pad_y = (self.h - self.img_h - str_h) / 2
+    local img_pad_x = (self.w / self.scale - self.img_w) / 2
+    local img_pad_y = (self.h / self.scale - self.img_h - str_h / self.scale) / 2
 
     GUI.draw_rle_image(p, img_pad_x, img_pad_y)
 
@@ -119,7 +120,7 @@ function GUI.ImageButton:draw()
         buff = self.buffs[2]
     end
 
-    gfx.blit(buff, 1, 0, 0, 0, self.w, self.h, self.x, self.y)
+    gfx.blit(buff, self.scale, 0, 0, 0, self.w, self.h, self.x, self.y)
 
     -- Draw the caption
     GUI.color(self.col_txt)
@@ -130,7 +131,7 @@ function GUI.ImageButton:draw()
 
     local str_w, str_h = gfx.measurestr(str)
     gfx.x = x + ((w - str_w) / 2)
-    gfx.y = y + h - str_h - 8
+    gfx.y = y + h - str_h - 8 * self.scale
     gfx.drawstr(str)
 
 end

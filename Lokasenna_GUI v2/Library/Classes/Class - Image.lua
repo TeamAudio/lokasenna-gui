@@ -1,7 +1,7 @@
 --[[	Lokasenna_GUI (Team Audio addition) - Image class
 
     Creation parameters:
-        name, z, x, y, w, h[, pixels]
+        name, z, x, y, w, h[, pixels, scale]
 
 ]]--
 
@@ -13,7 +13,7 @@ end
 
 
 GUI.Image = GUI.Element:new()
-function GUI.Image:new(name, z, x, y, w, h, pixels)
+function GUI.Image:new(name, z, x, y, w, h, pixels, scale)
 
     local Image = (not x and type(z) == "table") and z or {}
     Image.name = name
@@ -26,6 +26,7 @@ function GUI.Image:new(name, z, x, y, w, h, pixels)
     Image.h = Image.h or h
 
     Image.pixels = Image.pixels or pixels
+    Image.scale = Image.scale or scale or 1
 
     Image.bg = Image.bg or "wnd_bg"
 
@@ -71,6 +72,6 @@ end
 
 function GUI.Image:draw()
 
-    gfx.blit(self.buff, 1, 0, 0, 0, self.w, self.h, self.x, self.y)
+    gfx.blit(self.buff, self.scale, 0, 0, 0, self.w, self.h, self.x, self.y)
 
 end
