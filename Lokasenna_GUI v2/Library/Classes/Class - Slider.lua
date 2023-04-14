@@ -6,7 +6,7 @@
     https://github.com/jalovatt/Lokasenna_GUI/wiki/Slider
 
     Creation parameters:
-  name, z, x, y, w, caption, min, max, defaults[, inc, dir]
+  name, z, x, y, w, caption, min, max, defaults[, inc, dir, size]
 
 ]]--
 
@@ -19,7 +19,7 @@ end
 
 GUI.Slider = GUI.Element:new()
 
-function GUI.Slider:new(name, z, x, y, w, caption, min, max, defaults, inc, dir)
+function GUI.Slider:new(name, z, x, y, w, caption, min, max, defaults, inc, dir, size)
 
   local Slider = (not x and type(z) == "table") and z or {}
 
@@ -32,10 +32,11 @@ function GUI.Slider:new(name, z, x, y, w, caption, min, max, defaults, inc, dir)
     Slider.y = Slider.y or y
 
   Slider.dir = Slider.dir or dir or "h"
+  Slider.size = Slider.size or size or 8
 
     Slider.w, Slider.h = table.unpack(Slider.dir ~= "v"
-                        and {Slider.w or w, 8}
-                        or  {8, Slider.w or w} )
+                        and {Slider.w or w, Slider.size}
+                        or  {Slider.size, Slider.w or w} )
 
   Slider.caption = Slider.caption or caption
   Slider.bg = Slider.bg or "wnd_bg"
@@ -146,7 +147,7 @@ function GUI.Slider:init()
 
 
     -- Handle
-  local hw, hh = table.unpack(self.dir == "h" and {8, 16} or {16, 8})
+  local hw, hh = table.unpack(self.dir == "h" and {self.size, self.size * 2} or {self.size * 2, self.size})
 
   gfx.dest = self.buffs[2]
   gfx.setimgdim(self.buffs[2], -1, -1)
@@ -191,7 +192,7 @@ function GUI.Slider:draw()
     x, w = x + 4, w - 8
 
     -- Size of the handle
-    self.handle_w, self.handle_h = 8, h * 2
+    self.handle_w, self.handle_h = self.size, h * 2
     local inc = w / self.steps
     local handle_y = y + (h - self.handle_h) / 2
 
