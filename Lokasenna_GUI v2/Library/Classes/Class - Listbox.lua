@@ -6,7 +6,7 @@
     https://github.com/jalovatt/Lokasenna_GUI/wiki/Listbox
 
     Creation parameters:
-	name, z, x, y, w, h[, list, multi, caption, pad]
+	name, z, x, y, w, h[, list, multi, caption, pad, bar_w]
 
 ]]--
 
@@ -18,7 +18,7 @@ end
 
 -- Listbox - New
 GUI.Listbox = GUI.Element:new()
-function GUI.Listbox:new(name, z, x, y, w, h, list, multi, caption, pad)
+function GUI.Listbox:new(name, z, x, y, w, h, list, multi, caption, pad, bar_w)
 
 	local lst = (not x and type(z) == "table") and z or {}
 
@@ -41,6 +41,7 @@ function GUI.Listbox:new(name, z, x, y, w, h, list, multi, caption, pad)
 
 	lst.caption = lst.caption or caption or ""
 	lst.pad = lst.pad or pad or 4
+	lst.bar_w = lst.bar_w or bar_w or 8
 
     if lst.shadow == nil then
         lst.shadow = true
@@ -332,7 +333,7 @@ end
 function GUI.Listbox:drawscrollbar()
 
 	local x, y, w, h = self.x, self.y, self.w, self.h
-	local sx, sy, sw, sh = x + w - 8 - 4, y + 4, 8, h - 12
+	local sx, sy, sw, sh = x + w - self.bar_w - 4, y + 4, self.bar_w, h - 12
 
 
 	-- Draw a gradient to fade out the last ~16px of text
@@ -420,7 +421,7 @@ end
 -- Is the mouse over the scrollbar (true) or the text area (false)?
 function GUI.Listbox:overscrollbar(x)
 
-	return (#self.list > self.wnd_h and (x or GUI.mouse.x) >= (self.x + self.w - 12))
+	return (#self.list > self.wnd_h and (x or GUI.mouse.x) >= (self.x + self.w - self.bar_w - 4))
 
 end
 
