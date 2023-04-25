@@ -6,7 +6,7 @@
     https://github.com/jalovatt/Lokasenna_GUI/wiki/Menubox
 
     Creation parameters:
-  name, z, x, y, w, h, caption, opts[, pad, noarrow]
+  name, z, x, y, w, h, caption, opts[, pad, arrow]
 
 ]]--
 
@@ -18,7 +18,7 @@ end
 
 
 GUI.Menubox = GUI.Element:new()
-function GUI.Menubox:new(name, z, x, y, w, h, caption, opts, pad, noarrow)
+function GUI.Menubox:new(name, z, x, y, w, h, caption, opts, pad, arrow)
 
   local menu = (not x and type(z) == "table") and z or {}
 
@@ -44,9 +44,9 @@ function GUI.Menubox:new(name, z, x, y, w, h, caption, opts, pad, noarrow)
 
   menu.pad = menu.pad or pad or 4
 
-  if menu.noarrow == nil then
+  if menu.arrow == nil then
 
-      menu.noarrow = noarrow or false
+      menu.arrow = arrow or 5
 
   end
   menu.align = menu.align or 0
@@ -95,7 +95,7 @@ function GUI.Menubox:init()
 
     self:drawframe()
 
-    if not self.noarrow then self:drawarrow() end
+    if self.arrow then self:drawarrow() end
 
 end
 
@@ -222,7 +222,7 @@ function GUI.Menubox:drawframe()
 
   GUI.color("elm_frame")
   gfx.rect(1, 1, w, h, 0)
-  if not self.noarrow then gfx.rect(1 + w - h, 1, h, h, 1) end
+  if self.arrow then gfx.rect(1 + w - h, 1, h, h, 1) end
 
   GUI.color("elm_fill")
   gfx.rect(1, h + 3, w, h, 0)
@@ -239,7 +239,7 @@ function GUI.Menubox:drawarrow()
     GUI.color("elm_bg")
 
     -- Triangle size
-    local r = 5
+    local r = self.arrow
     local rh = 2 * r / 5
 
     local ox = (1 + w - h) + h / 2
@@ -309,7 +309,7 @@ function GUI.Menubox:drawtext()
   gfx.x = self.x + 4
   gfx.y = self.y + (self.h - str_h) / 2
 
-    local r = gfx.x + self.w - 8 - (self.noarrow and 0 or self.h)
+    local r = gfx.x + self.w - 8 - (self.arrow and self.h or 0)
     local b = gfx.y + str_h
   gfx.drawstr(text, self.align, r, b)
 
