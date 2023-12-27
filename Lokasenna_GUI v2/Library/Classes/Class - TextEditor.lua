@@ -6,7 +6,7 @@
     https://github.com/jalovatt/Lokasenna_GUI/wiki/TextEditor
 
     Creation parameters:
-	name, z, x, y, w, h[, text, caption, pad]
+	name, z, x, y, w, h[, text, caption, pad, disableEditing]
 
 ]]--
 
@@ -294,7 +294,7 @@ function GUI.TextEditor:ontype(char, mod)
 		end
 
 	-- Typeable chars
-	elseif GUI.clamp(32, char, 254) == char then
+	elseif not disableEditing and GUI.clamp(32, char, 254) == char then
 
 		if self.sel_s then self:deleteselection() end
 
