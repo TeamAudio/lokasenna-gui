@@ -294,7 +294,7 @@ function GUI.TextEditor:ontype(char, mod)
 		end
 
 	-- Typeable chars
-	elseif not disableEditing and GUI.clamp(32, char, 254) == char then
+	elseif not self.disableEditing and GUI.clamp(32, char, 254) == char then
 
 		if self.sel_s then self:deleteselection() end
 
