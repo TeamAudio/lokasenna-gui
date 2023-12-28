@@ -6,7 +6,7 @@
     https://github.com/jalovatt/Lokasenna_GUI/wiki/TextEditor
 
     Creation parameters:
-	name, z, x, y, w, h[, text, caption, pad]
+	name, z, x, y, w, h[, text, caption, pad, disableEditing]
 
 ]]--
 
@@ -18,7 +18,7 @@ end
 
 
 GUI.TextEditor = GUI.Element:new()
-function GUI.TextEditor:new(name, z, x, y, w, h, text, caption, pad)
+function GUI.TextEditor:new(name, z, x, y, w, h, text, caption, pad, disableEditing)
 
 	local txt = (not x and type(z) == "table") and z or {}
 
@@ -36,6 +36,7 @@ function GUI.TextEditor:new(name, z, x, y, w, h, text, caption, pad)
 
 	txt.caption = txt.caption or caption or ""
 	txt.pad = txt.pad or pad or 4
+	txt.disableEditing = txt.disableEditing or disableEditing
 
     if txt.shadow == nil then
         txt.shadow = true
@@ -294,7 +295,7 @@ function GUI.TextEditor:ontype(char, mod)
 		end
 
 	-- Typeable chars
-	elseif GUI.clamp(32, char, 254) == char then
+	elseif not self.disableEditing and GUI.clamp(32, char, 254) == char then
 
 		if self.sel_s then self:deleteselection() end
 
