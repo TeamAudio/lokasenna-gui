@@ -18,7 +18,7 @@ end
 
 
 GUI.TextEditor = GUI.Element:new()
-function GUI.TextEditor:new(name, z, x, y, w, h, text, caption, pad)
+function GUI.TextEditor:new(name, z, x, y, w, h, text, caption, pad, disableEditing)
 
 	local txt = (not x and type(z) == "table") and z or {}
 
@@ -36,6 +36,7 @@ function GUI.TextEditor:new(name, z, x, y, w, h, text, caption, pad)
 
 	txt.caption = txt.caption or caption or ""
 	txt.pad = txt.pad or pad or 4
+	txt.disableEditing = txt.disableEditing or disableEditing
 
     if txt.shadow == nil then
         txt.shadow = true
